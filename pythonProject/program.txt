@@ -1,0 +1,16 @@
+.data
+
+	w: .space 5
+	n: .word 5
+	m: .word 5
+ .text
+
+
+    addi $t0, $zero, 5
+    addi $t1, $zero, 5
+    add $t2, $t0, $t1
+
+	li $v0, 10
+	syscall
+	
+	
