@@ -11,6 +11,7 @@ class If:
         circuit.muxPc.setValue0(circuit.aluPc.ope("add", 4, pc.getDir()))
 
         concurrent_pc = circuit.muxPc.getValue()
+        circuit.muxPc.setSignal(False)
 
         pc.updateConten(concurrent_pc)
 

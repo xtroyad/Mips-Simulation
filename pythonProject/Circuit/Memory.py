@@ -57,7 +57,9 @@ class IntructionMem(Memory):
         self.free = self.free + 4
 
     def addLabel(self, instruction, label):
-        self.labels[label] = self.free
+
+        for l in label:
+            self.labels[l] = self.free
         self.add(instruction)
 
     def replacePseudoIntruc(self, list):
@@ -77,6 +79,7 @@ class Registers(Memory):
 
     def add(self, data):
         self.content['$zero'] = 0
+        self.content['$at'] = 0
         self.content['$v0'] = 0
         self.content['$v1'] = 0
         for i in range(0, 9):

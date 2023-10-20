@@ -51,7 +51,7 @@ class Signal:
             self.aluSrc = 0b1
             self.regWrite = 0b0
 
-        if (op == "beq" or op =="bne" or op == "j"):
+        if (op == "beq" or op =="bne" or op == "j" or op =="bgt"):
             # self.regDest = x
             self.pcSrc = 0b1
             self.memRead = 0b0

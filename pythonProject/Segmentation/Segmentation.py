@@ -32,4 +32,18 @@ class Segmentation:
             # IF
             circuit.ifid = self.fetch.execute(circuit.pc, circuit)
 
+            actualpc = circuit.pc.getDir()
+
+            if actualpc != None:
+                print("###############################################################################################3")
+
+
+                print(f"Pc actual: {actualpc}")
+                print(f"Instruccion: {circuit.instMem.content[actualpc]}")
+                print(f"t0: {circuit.registers.content['$t0']}")
+                print(f"t1: {circuit.registers.content['$t1']}")
+                print("###############################################################################################3")
+
+
             cond = (circuit.memwb != None or circuit.exmem != None or circuit.idex != None or  circuit.ifid != None)
+        print("Hols")

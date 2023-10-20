@@ -1,0 +1,13 @@
+.data
+
+	w: .space 5
+	n: .word 5
+	m: .word 5
+ .text
+
+hola:   li $t0, 5
+    addi $t9, $zero, 5
+    bne $zero, $t0 hola
+
+	li $v0, 10
+	syscall

@@ -1,0 +1,65 @@
+	.data
+
+limit:	.word 	5
+result: .space 4
+nImp: 	.space 4
+nPar:	.space 4
+
+	.text
+main:
+
+
+	li $t0, 1
+	lw $t1, limit
+
+	add $v1, $t1, $t0
+
+
+	add $t9, $t1, $zero
+
+
+
+	li $t6, 0
+	li $t7, 0
+	li $t8, 1
+
+for:	bgt $t0, $t1 endfor
+	j body
+inc:	addi $t0, $t0, 1
+body:
+
+if:	beq $t8, $zero, else
+
+then:
+
+
+	add $t3, $t0, $zero
+	add $t4 , $t3, $t3
+	add $t5 , $t4, $t3
+
+	add $t6, $t6, $t5
+	addi $t7, $t7, 1
+
+	li $t8, 0
+	j endif
+else:
+	li $t8, 1
+
+endif:
+
+
+cond: 	bne $t0, $t1, inc
+endfor:
+
+	sub $t9, $t9, $t7
+
+	sw $t6 result
+	sw $t7, nImp
+	sw $t9, nPar
+
+
+end:
+	li $v0, 10
+	syscall
+
+

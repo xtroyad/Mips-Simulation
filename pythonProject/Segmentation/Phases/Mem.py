@@ -16,7 +16,7 @@ class Mem:
             if memWrite == 0b1:
                 circuit.dataMem.content[aluResult] = reg2Data
             if memRead == 0b1:
-                memData = circuit.dataMem.content[aluResult]
+                memData = int(circuit.dataMem.content[aluResult])
 
             return [wb, memData, aluResult, regDest]
         else:

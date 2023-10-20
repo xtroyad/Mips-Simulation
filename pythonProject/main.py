@@ -12,4 +12,6 @@ if __name__ == '__main__':
     uc = ControlUnit(circuit)
     uc.executeSegementation()
 
+    print("fin")
+
     lol = input()

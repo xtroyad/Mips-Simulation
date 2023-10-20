@@ -6,8 +6,6 @@ class Ex:
     def execute(self, idex, circuit, instruction):
 
 
-
-
         if idex!=None:
             ###############################################################
             # Futuro registro exmem
@@ -21,6 +19,19 @@ class Ex:
 
             [regDest, aluOp, aluSrc] = idex[2]
 
+            do_branch, type_b = idex[4]
+
+            if do_branch:
+                jum_result = 0
+
+                if type_b == "j":
+                    jum_result = idex[7]
+                else:
+                    jum_result = circuit.aluJump.ope("add", idex[3], idex[7]*4)
+
+                circuit.muxPc.setValue1(jum_result)
+                circuit.muxPc.setSignal(True)
+                circuit.ifid = None
 
             # Calculo de la ALU
             op1 = idex[5]

@@ -23,7 +23,7 @@ class Id:
             ex = []
             new_pc = ifid[0]
 
-            do_branch = 0
+            do_branch = (False,"")
             rdata1 = 0
             rdata2 = 0
             im = 0
@@ -51,35 +51,61 @@ class Id:
             # Carga de memoria
             elif (instruction[0] == "lw"):
                 rs = instruction[2]
-                rdata1 = circuit.registers.getData(rs)
-
                 rt = instruction[1]
 
-                im = instruction[3]
+                rdata1, rdata1 = circuit.hd.raw_detection(rs, rs)
 
-            # Salto incondicional
+
+                im = int(instruction[3])
+
+
+            # Carga en memoria
+            elif (instruction[0] == "sw"):
+                rs = instruction[2]
+                rt = instruction[1]
+
+
+                rdata1, rdata2 = circuit.hd.raw_detection(rs, rt)
+
+                im = int(instruction[3])
+
             elif instruction[0] == "j":
-                circuit.pc.updateConten(instruction[1])
-            # Salto condicional
-            elif (instruction[0] == "beq" or instruction[0] == "bne" or instruction[0] == "addi"):
+                im = int(instruction[1])
+                do_branch = self.calculate_branch(rdata1, rdata2, instruction[0])
+
+
+            # Tipo I
+            elif (instruction[0] == "beq" or instruction[0] == "bgt" or instruction[0] == "bne" or instruction[0] == "addi" ):
 
                 r1 = instruction[1]
                 r2 = instruction[2]
-
-                rdata1, rdata2 = circuit.hd.raw_detection(r1, r2)
+                if instruction[0] == "addi":
+                    rdata1, rdata1 = circuit.hd.raw_detection(r2, r2)
+                else:
+                    rdata1, rdata2 = circuit.hd.raw_detection(r1, r2)
 
                 do_branch = self.calculate_branch(rdata1, rdata2, instruction[0])
 
                 im = int(instruction[3])
+                if instruction[0] == "addi":
+                    rt = instruction[1]
 
-                rt = instruction[1]
+            # En las comprobaciones de raw hemos tenido que meter una burbuja
+            if rdata1 == None and rdata2 == None:
+                return None, ""
 
             return [wb, m, ex, new_pc, do_branch, rdata1, rdata2, im, rt, rd], instruction[0]
 
         else:
             return (None, "")
     def calculate_branch(self, d1, d2, op):
-        if (op == "beq"):
-            return d1 == d2
-        if (op == "bne"):
-            return d1 != d2
+        if op == "beq":
+            return True if d1 == d2 else False, "b"
+        elif op == "bne":
+            return True if d1 != d2 else False, "b"
+        elif op == "bgt":
+            return True if d1 > d2 else False, "b"
+        elif op =="j":
+            return (True, "j")
+        else:
+            return (False, "")
