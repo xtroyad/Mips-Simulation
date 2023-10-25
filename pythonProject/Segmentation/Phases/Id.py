@@ -1,8 +1,13 @@
-class Id:
-    def __init__(self):
-        pass
+from Segmentation.Phases.Phase import Phase
+from colorama import init, Fore, Back, Style
+init(autoreset=True)
 
-    def callSystem(self, circuit): # Todo: podemos leer por teclado
+
+class Id(Phase):
+    def __init__(self):
+        super().__init__()
+
+    def callSystem(self, circuit):
 
         rdata1, rdata2 = circuit.hd.raw_detection("$v0", "$v0")
         if rdata1 == 10:
@@ -10,12 +15,13 @@ class Id:
             circuit.pc.updateConten(None)
             return (None, "")
 
-
     def execute(self, ifid, circuit):
 
-
-
-        if ifid != None:  # Todo: Como veo que acaba
+        if ifid != None:
+            self.printr("#############################################")
+            self.printr(f"ID ({ifid[0] - 4}) {ifid[1]}")
+            self.printr("#############################################")
+            print()
             ###############################################################
             # Futuro registro idex
             wb = []
@@ -23,7 +29,7 @@ class Id:
             ex = []
             new_pc = ifid[0]
 
-            do_branch = (False,"")
+            do_branch = (False, "")
             rdata1 = 0
             rdata2 = 0
             im = 0
@@ -55,7 +61,6 @@ class Id:
 
                 rdata1, rdata1 = circuit.hd.raw_detection(rs, rs)
 
-
                 im = int(instruction[3])
 
 
@@ -63,7 +68,6 @@ class Id:
             elif (instruction[0] == "sw"):
                 rs = instruction[2]
                 rt = instruction[1]
-
 
                 rdata1, rdata2 = circuit.hd.raw_detection(rs, rt)
 
@@ -75,7 +79,7 @@ class Id:
 
 
             # Tipo I
-            elif (instruction[0] == "beq" or instruction[0] == "bgt" or instruction[0] == "bne" or instruction[0] == "addi" ):
+            elif (instruction[0] == "beq" or instruction[0] == "bgt" or instruction[0] == "bne" or instruction[0] == "addi"):
 
                 r1 = instruction[1]
                 r2 = instruction[2]
@@ -94,10 +98,60 @@ class Id:
             if rdata1 == None and rdata2 == None:
                 return None, ""
 
-            return [wb, m, ex, new_pc, do_branch, rdata1, rdata2, im, rt, rd], instruction[0]
+            exit = [wb, m, ex, new_pc, do_branch, rdata1, rdata2, im, rt, rd], instruction
+            self.view_phase([[new_pc, instruction], exit[0]])
+
+            return exit
 
         else:
+            self.printr("#############################################")
+            self.printr(f"ID (NULL)")
+            self.printr("#############################################")
+            print()
+            print()
             return (None, "")
+
+    def view_phase(self, info):
+        ifid = info[0]
+        idex = info[1]
+
+
+
+        self.printr("IF/ID register:")
+        self.printr(f"|  |")
+        self.printr(f"|  | PC+4 ===> {ifid[0]}")
+        self.printr(f"|  |")
+        self.printr(f"|  | INTRUC => {ifid[1]} ")
+        self.printr(f"|  |")
+        print()
+        self.printr("ID/EX register:")
+        self.printr(f"         |  |")
+        self.printr(f"WB =====>|  | {idex[0]}")
+        self.printr(f"         |  |")
+        self.printr(f"M ======>|  | {idex[1]} ")
+        self.printr(f"         |  |")
+        self.printr(f"EX =====>|  | {idex[2]}")
+        self.printr(f"         |  |")
+        self.printr(f"NEW PC =>|  | {idex[3]} ")
+        self.printr(f"         |  |")
+        self.printr(f"BRANCH =>|  | {idex[4]}")
+        self.printr(f"         |  |")
+        self.printr(f"DATA 1 =>|  | {idex[5]} ")
+        self.printr(f"         |  |")
+        self.printr(f"DATA 2 =>|  | {idex[6]}")
+        self.printr(f"         |  |")
+        self.printr(f"IM === =>|  | {idex[7]} ")
+        self.printr(f"         |  |")
+        self.printr(f"REGD 1 =>|  | {idex[8]} ")
+        self.printr(f"         |  |")
+        self.printr(f"REGD 2 =>|  | {idex[9]} ")
+        self.printr(f"         |  |")
+
+
+
+    def printr(self, text):
+        print(Fore.RED  + text)
+
     def calculate_branch(self, d1, d2, op):
         if op == "beq":
             return True if d1 == d2 else False, "b"
@@ -105,7 +159,7 @@ class Id:
             return True if d1 != d2 else False, "b"
         elif op == "bgt":
             return True if d1 > d2 else False, "b"
-        elif op =="j":
+        elif op == "j":
             return (True, "j")
         else:
             return (False, "")

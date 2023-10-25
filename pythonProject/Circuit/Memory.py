@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
-
+from colorama import init, Fore, Back, Style
+init(autoreset=True)
 class Memory(ABC):
 
     def __init__(self):
@@ -16,6 +17,16 @@ class Memory(ABC):
     def getData(self, dir):
         return self.content[dir]
 
+    def print_memory(self):
+
+        for key, value in self.content.items():
+            if value==None or value == 0:
+                print(f"({key})   {value}")
+            else:
+                print(Fore.RED + f"({key})   {value}")
+
+
+
 class DataMem(Memory):
     def __init__(self):
         super().__init__()
@@ -26,7 +37,7 @@ class DataMem(Memory):
 
     def create(self):
         cont = 0
-        for i in range(0, 10): #Todo: Cuantas iteraciones
+        for i in range(0, 10):
             self.content[cont] = 0
             cont = cont+4
 
@@ -39,6 +50,8 @@ class DataMem(Memory):
             self.content[self.free] = data[2]
 
         self.free = self.free+4
+
+
 class IntructionMem(Memory):
     def __init__(self):
         super().__init__()
@@ -48,7 +61,7 @@ class IntructionMem(Memory):
 
     def create(self):
         cont = 0
-        for i in range(0, 10): #Todo: Cuantas iteraciones
+        for i in range(0, 10):
             self.content[cont] = []
             cont = cont+4
 
@@ -98,7 +111,3 @@ class Registers(Memory):
         self.content['$sp'] = 0
         self.content['$fp'] = 0
         self.content['$ra'] = 0
-
-
-    def load(self, data, register):
-        self.content[register] = data

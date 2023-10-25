@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 
 class Alu(ABC):
     def __init__(self):
-        self.result = 0
+        pass
 
     @abstractmethod
     def ope(self, cod, op1, op2):
@@ -14,16 +14,12 @@ class MainAlu(Alu):
 
     def __init__(self):
         super().__init__()
-        self.zero = 0
 
     def ope(self, cod, op1, op2):
-
         if cod == "add":
-            self.result = op1 + op2
-            return self.result
+            return op1 + op2
         if cod == "sub":
-            self.result = op1 - op2
-            return self.result
+            return op1 - op2
 
 
 class AddAlu(Alu):
@@ -32,5 +28,4 @@ class AddAlu(Alu):
         super().__init__()
 
     def ope(self, cod, op1, op2):
-        self.result = op1 + op2
-        return self.result
+        return op1 + op2

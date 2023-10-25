@@ -8,16 +8,10 @@ nPar:	.space 4
 	.text
 main:
 
-
 	li $t0, 1
 	lw $t1, limit
-
+    add $t9, $t1, $zero
 	add $v1, $t1, $t0
-
-
-	add $t9, $t1, $zero
-
-
 
 	li $t6, 0
 	li $t7, 0

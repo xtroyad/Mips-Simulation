@@ -1,3 +1,5 @@
+import time
+
 from Segmentation.Phases.If import If
 from Segmentation.Phases.Id import Id
 from Segmentation.Phases.Ex import Ex
@@ -16,17 +18,28 @@ class Segmentation:
         self. writeB = Wb()
 
     def execute(self, circuit):
+        circuit.print_data()
         cond = True
         instruction = ""
+        instruction_to_mem = ""
+        instruction_to_wb = ""
+        pc_to_mem = -4
+        pc_to_wb = -4
+        ncicle = 1
 
+        input("\nPress ENTER to continue\n")
         while(cond):
+            print("#############################################################################################")
+            print(f"CICLO {ncicle}")
+            print("#############################################################################################")
+            print()
             # WB
-            self.writeB.execute(circuit.memwb, circuit)
+            self.writeB.execute(circuit.memwb, circuit, instruction_to_wb, pc_to_wb)
             # MEM
-            circuit.memwb = self.memAccess.execute(circuit.exmem, circuit)
+            circuit.memwb, instruction_to_wb, pc_to_wb = self.memAccess.execute(circuit.exmem, circuit, instruction_to_mem, pc_to_mem)
             # EX
             aux = self.exec.execute(circuit.idex, circuit, instruction)
-            circuit.exmem = aux
+            (circuit.exmem, instruction_to_mem, pc_to_mem) = aux
             # ID
             (circuit.idex, instruction) = self.decode.execute(circuit.ifid, circuit)
             # IF
@@ -34,16 +47,8 @@ class Segmentation:
 
             actualpc = circuit.pc.getDir()
 
-            if actualpc != None:
-                print("###############################################################################################3")
-
-
-                print(f"Pc actual: {actualpc}")
-                print(f"Instruccion: {circuit.instMem.content[actualpc]}")
-                print(f"t0: {circuit.registers.content['$t0']}")
-                print(f"t1: {circuit.registers.content['$t1']}")
-                print("###############################################################################################3")
-
-
+            ncicle = 1 +ncicle
+            # time.sleep(0.5)
             cond = (circuit.memwb != None or circuit.exmem != None or circuit.idex != None or  circuit.ifid != None)
-        print("Hols")
+
+

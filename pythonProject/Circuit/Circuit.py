@@ -12,8 +12,8 @@ class Circuit:
 
     def __init__(self):
         self.hd = HazardDetectionUnit(self)
-        self.muxPc = Mux()
 
+        self.muxPc = Mux()
         self.signal = Signal()
         self.pc = Pc()
         self.dataMem = DataMem()
@@ -29,3 +29,16 @@ class Circuit:
         self.idex = None
         self.exmem = None
         self.memwb = None
+
+    def print_data(self):
+        print("########################################")
+        print("INSTRUCTIONS:")
+        self.instMem.print_memory()
+        print("########################################")
+        print("DATAS:")
+        self.dataMem.print_memory()
+        print("########################################")
+
+        print("REGISTERS:")
+        self.registers.print_memory()
+
